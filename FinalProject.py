@@ -100,6 +100,14 @@ def hit_zero(board, mines, x, y):
     else:
         board[x][y] = str(mine_count)
 
+def reveal_mines(board, mines):
+    for x in range(len(board)):
+        for y in range(len(board[0])):
+            if(mines[x][y]):
+                board[x][y] = MINE_CHAR
+            else:
+                board[x][y] = EMPTY_CHAR
+
 mines = generate_mines(WIDTH, HEIGHT)
 board = generate_board(WIDTH, HEIGHT)
 
@@ -112,6 +120,7 @@ print_board(board)
 #Start monitoring time
 start_time = time.monotonic()
 
+message = ""
 playing = True
 while(playing):
     print()
@@ -126,7 +135,7 @@ while(playing):
             if(mines[x][y] == True):
                 board[x][y] = MINE_CHAR
                 print_board(board)
-                message = "You Lost."
+                message = "You lost"
                 playing = False
             else:
                 mine_count = calc_mines(mines, x, y)
@@ -136,9 +145,9 @@ while(playing):
                     board[x][y] = str(mine_count)
                 print_board(board)
                 if(check_win(board, mines)):
-                    message = "You Won!"
+                    message = "You won"
                     playing = False;
-            print(message)
+            print(message + ".")
         else:
             print("Can't mine an empty square")
     elif(move == "f"):
@@ -150,4 +159,7 @@ while(playing):
 
     print()
 
-print(f"Total time: {round(time.monotonic() - start_time, 2)} seconds")
+print("Mines:")
+reveal_mines(board, mines)
+print_board(board)
+print(f"{message} in {round(time.monotonic() - start_time, 2)} seconds")
